@@ -1,7 +1,7 @@
-#define _CRT_SECURE_NO_WARNINGS // Zgjidhja per gabimin C4996
+#define _CRT_SECURE_NO_WARNINGS 
 #include <iostream>
 #include <vector>
-#include <string>
+#include <string>   
 #include <ctime>
 #include <iomanip>
 #include <limits>
@@ -14,6 +14,7 @@ public:
     string titulli;
     string autori;
     bool iHuazuar;
+    string emriHuazuesit;
     string infoKthimi;
 
     Liber(int i, string t, string a) {
@@ -21,17 +22,20 @@ public:
         titulli = t;
         autori = a;
         iHuazuar = false;
+        emriHuazuesit = " - ";
         infoKthimi = " - ";
     }
 
     void shfaqDetaje() {
         cout << left << setw(8) << id
-            << setw(20) << titulli
-            << setw(15) << autori
+            << setw(18) << titulli.substr(0, 17)
+            << setw(15) << autori.substr(0, 14)
             << setw(12) << (iHuazuar ? "HUAZUAR" : "LIRE")
-            << " Statusi: " << infoKthimi << endl;
+            << setw(15) << emriHuazuesit.substr(0, 14)
+            << " Data: " << infoKthimi << endl;
     }
 };
+
 
 class Biblioteka {
 private:
@@ -44,7 +48,7 @@ public:
         cout << "\n--- Regjistrimi i Librit ---\n";
         cout << "ID (Numer): ";
         while (!(cin >> id)) {
-            cout << "Gabim! Shkruaj nje numer: ";
+            cout << "Gabim! Jepni nje numer per ID: ";
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
@@ -57,38 +61,42 @@ public:
 
     void huazo() {
         int id;
+        string emri;
         cout << "Shkruaj ID e librit per huazim: "; cin >> id;
         for (auto& l : inventari) {
             if (l.id == id) {
                 if (l.iHuazuar) {
-                    cout << "Ky liber eshte huazuar nje here!\n";
+                    cout << "Gabim: Libri eshte zene nga " << l.emriHuazuesit << endl;
                     return;
                 }
+                cout << "Emri i personit qe po e huazon: ";
+                cin.ignore(); getline(cin, emri);
+
                 l.iHuazuar = true;
+                l.emriHuazuesit = emri;
+
                 time_t koha = time(0);
-                char* dt = ctime(&koha); // Tani Visual Studio e lejon kete
+                char* dt = ctime(&koha);
                 string dataSot(dt);
                 if (!dataSot.empty()) dataSot.pop_back();
-                l.infoKthimi = "Huazuar me: " + dataSot;
-                cout << "Huazimi u krye me sukses!\n";
+                l.infoKthimi = dataSot;
+
+                cout << "Sukses! Libri u huazua nga " << emri << endl;
                 return;
             }
         }
-        cout << "Libri nuk u gjet ne sistem.\n";
+        cout << "Libri me kete ID nuk u gjet!\n";
     }
-
-    void shfaqInventarin() {
+    void shfaq() {
         if (inventari.empty()) {
             cout << "\nLibraria eshte boshe.\n";
             return;
         }
-        cout << "\n" << string(70, '-') << "\n";
-        cout << left << setw(8) << "ID" << setw(20) << "TITULLI" << setw(15) << "AUTORI"
-            << setw(12) << "STATUSI" << "DATA E VEPRIMIT\n";
-        cout << string(70, '-') << "\n";
-        for (auto& l : inventari) {
-            l.shfaqDetaje();
-        }
+        cout << "\n" << string(85, '-') << "\n";
+        cout << left << setw(8) << "ID" << setw(18) << "TITULLI" << setw(15) << "AUTORI"
+            << setw(12) << "STATUSI" << setw(15) << "HUAZUESI" << "DATA\n";
+        cout << string(85, '-') << "\n";
+        for (auto& l : inventari) l.shfaqDetaje();
     }
 };
 
@@ -97,12 +105,12 @@ int main() {
     int zgjedhja;
 
     while (true) {
-        cout << "\n==== Sistemimi i librave ====\n";
+        cout << "\n==== MENAXHIMI I BIBLIOTEKES ====\n";
         cout << "1. Shto Liber te Ri\n";
         cout << "2. Shfaq Inventarin\n";
-        cout << "3. Huazo Librin\n";
+        cout << "3. Huazo Liber\n";
         cout << "4. Mbyll Programin\n";
-        cout << "Zgjedhja juaj: ";
+        cout << "Zgjedhja: ";
 
         if (!(cin >> zgjedhja)) {
             cin.clear();
@@ -111,10 +119,10 @@ int main() {
         }
 
         if (zgjedhja == 1) ime.shtoLiber();
-        else if (zgjedhja == 2) ime.shfaqInventarin();
+        else if (zgjedhja == 2) ime.shfaq();
         else if (zgjedhja == 3) ime.huazo();
         else if (zgjedhja == 4) break;
-        else cout << "Opsion i gabuar!\n";
+        else cout << "Zgjedhje e gabuar!\n";
     }
 
     return 0;
