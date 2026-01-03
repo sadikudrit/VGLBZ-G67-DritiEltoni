@@ -85,7 +85,7 @@ public:
                 return;
             }
         }
-        cout << "Libri me kete ID nuk u gjet!\n";
+        cout << "Libri me kete ID nuk ekziston!\n";
     }
     void shfaq() {
         if (inventari.empty()) {
