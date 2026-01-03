@@ -97,10 +97,10 @@ int main() {
     int zgjedhja;
 
     while (true) {
-        cout << "\n==== SISTEMI I BIBLIOTEKES ====\n";
+        cout << "\n==== Sistemimi i librave ====\n";
         cout << "1. Shto Liber te Ri\n";
-        cout << "2. Shfaq Listen e Librave\n";
-        cout << "3. Huazo Liber\n";
+        cout << "2. Shfaq Inventarin\n";
+        cout << "3. Huazo Librin\n";
         cout << "4. Mbyll Programin\n";
         cout << "Zgjedhja juaj: ";
 
